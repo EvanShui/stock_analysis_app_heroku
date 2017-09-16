@@ -127,7 +127,7 @@ def y_min_max(data, index):
         minVal = 0
     return ((minVal - 5), (maxVal + 5))
 
-p = figure(x_axis_type="datetime", tools=tools_lst, width=1100, height = 500)
+p = figure(x_axis_type="datetime", tools=tools_lst, width=1000, height = 500)
 source = data_to_CDS(stock_ticker, data, delta_5_year)
 p.line('date', 'price', source=source, line_width=2)
 
