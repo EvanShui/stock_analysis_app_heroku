@@ -59,11 +59,14 @@ tools_lst = "pan,wheel_zoom,box_zoom,reset"
 date_titles = ["week", "month", "3 months", "6 months", "1 year", "3 years"]
 
 text_input = TextInput(value="NFLX")
+text_input.css_classes = ["text-input"]
 button = Button(label="main")
 button2 = Button(label="submit")
+button2.css_classes = ["button"]
 output=Paragraph()
 radio_button_group = RadioButtonGroup(
         labels=["1w", "1m", "3m", "6m", "1y", "5y"], active=5)
+radio_button_group.css_classes = ["radio-button-group"]
 
 # str -> lst
 # Hard coded to specifically scrape the google website and returns a list of
@@ -102,7 +105,6 @@ def web_scraper(day, month, year):
 
 def data_to_CDS(stock_ticker, data, start_date):
     delta_days = np.busday_count(start_date, date.today())
-    print(delta_days)
     data['ticker'] = stock_ticker
     adjusted_data = data.tail(delta_days)
     source = ColumnDataSource(data=dict(
@@ -114,7 +116,6 @@ def data_to_CDS(stock_ticker, data, start_date):
 
 def data_to_CDS_y(data, start_date):
     delta_days = np.busday_count(start_date, date.today())
-    print("y",delta_days)
     adjusted_data = data['close'].tail(delta_days)
     return (np.array(adjusted_data.index, dtype=np.datetime64).tolist(), np.array(adjusted_data.values).tolist())
 
@@ -229,7 +230,7 @@ button2.js_on_event(ButtonClick, button_callback)
 
 radio_button_group.callback = radio_button_callback
 
-lay_out = column(radio_button_group, row(text_input, button2), output, row(p,div))
+lay_out = column(row(text_input, button2), radio_button_group, output, row(p,div))
 
 js,div=components(lay_out, INLINE)
 
