@@ -46,10 +46,6 @@ def get_y_data():
     data, meta_data = get_data(ticker)
     BasicLine.data = data
     sources_y_list = data_to_CDS_y(data, dates[5])
-    #app.logger.info(
-    #    "ticker %r", (sources_y_list))
-    #app.logger.info(
-    #    "sources_list %r", (sources_list))
     return jsonify({ticker:(sources_y_list[0], sources_y_list[1])})
 
 @app.route("/get_data",methods=['POST'])

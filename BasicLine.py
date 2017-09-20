@@ -87,9 +87,7 @@ def web_scraper(day, month, year):
 
     soup_tuple_list = zip(soup.findAll(class_="searchresult"), soup.findAll(class_="deemphasized")[1:-1])
     #iterating through a tags which includes title and links
-    #for x in soup.findAll(class_="searchresult"):
     #appends the title of each individual search result to a list
-    #    lst.append(x.a.encode("utf-8"))
     #iterating through time published and publishing company
     #gets rid of the prev strings at the beginning and end of the resulting list
     for article, date in soup_tuple_list:
@@ -117,7 +115,7 @@ def data_to_CDS(stock_ticker, data, start_date):
 def data_to_CDS_y(data, start_date):
     delta_days = np.busday_count(start_date, date.today())
     adjusted_data = data['close'].tail(delta_days)
-    return (np.array(adjusted_data.index, dtype=np.datetime64).tolist(), np.array(adjusted_data.values).tolist())
+    return (np.array(adjusted_data.values).tolist(), [int(x) for x in (data.tail(1).values)[0]])
 
 def y_min_max(data, index):
     delta_days = np.busday_count(dates[index], date.today())
@@ -127,6 +125,7 @@ def y_min_max(data, index):
     if minVal < 0:
         minVal = 0
     return ((minVal - 5), (maxVal + 5))
+
 
 p = figure(x_axis_type="datetime", tools=tools_lst, width=1000, height = 500)
 source = data_to_CDS(stock_ticker, data, delta_5_year)
@@ -142,11 +141,17 @@ p.add_tools(HoverTool(tooltips=[
     mode="vline"
 ))
 
+#finance_info = Div(text="""
+#    <b>NFLX</b>
+#    <div class='price'>
+#        24.31
+#    </div>
+#""")
+
 div = Div(text="""Click on the graph to display a list of financial articles on and before that date""", width=500, height=500)
 div.css_classes = ["scroll-box"]
 
 button_callback = CustomJS(args=dict(radio_button_group = radio_button_group, div=div, text_input=text_input, output=output, source=source),code="""
-     //var plot_data = source.data;
      output.text = ''
      div.text=''
      var ticker = text_input.value;
@@ -156,12 +161,15 @@ button_callback = CustomJS(args=dict(radio_button_group = radio_button_group, di
         data: {"ticker_sent": ticker},
         dataType: 'json',
         success: function (json_from_server) {
-            var updated_price_list = json_from_server[ticker];
-            source.data['price'] = json_from_server[ticker][1];
+            var updated_price_list = json_from_server[ticker][0];
+            var current_date_data = json_from_server[ticker][1];
+            source.data['price'] = updated_price_list;
+            var current_price = updated_price_list[updated_price_list.length-1]
             source.trigger('change');
             var actual_ticker = %r;
-            console.log(actual_ticker)
             radio_button_group.active = 5
+            //finance_info.text = ("<b>" + ticker.toUpperCase() + "</b>")
+            //finance_info.text = finance_info.text.concat("<div>" + current_price + "</div>")
         },
         error: function() {
             output.text = "Invalid Ticker"
@@ -231,6 +239,8 @@ button2.js_on_event(ButtonClick, button_callback)
 radio_button_group.callback = radio_button_callback
 
 lay_out = column(row(text_input, button2), radio_button_group, output, row(p,div))
+
+curdoc().add_root(lay_out)
 
 js,div=components(lay_out, INLINE)
 
