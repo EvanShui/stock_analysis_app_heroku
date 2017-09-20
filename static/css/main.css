@@ -1,11 +1,8 @@
-h3 {
-  color:olive;
-}
-close     low     volume    open    high
 .scroll-box {
   overflow:auto;
   position: absolute;
   bottom: 20px;
+  border: 1px solid black;
 }
 
 .button {
