@@ -1,35 +1,25 @@
 #importing Bokeh
-import pandas_datareader.data as web
-import datetime
+from alpha_vantage.timeseries import TimeSeries
+from bokeh.palettes import Spectral4
 from bokeh.plotting import figure, show, output_file, ColumnDataSource
 from bokeh.io import curdoc
 from bokeh.models import HoverTool, OpenURL, TapTool, CustomJS, ColumnDataSource, Tool, Div, Button
 from bokeh.models.widgets import Panel, Tabs, TextInput, Button, Paragraph, CheckboxButtonGroup
+from bokeh.embed import components
+from bokeh.events import ButtonClick
+from bokeh.resources import INLINE
+from bokeh.layouts import layout, row, column, widgetbox
+from bokeh.models.widgets import RadioButtonGroup
+from bokeh import events
+from bs4 import BeautifulSoup
 from datetime import date, timedelta
 from dateutil.relativedelta import *
-from bokeh.layouts import layout, row, column, widgetbox
-from bokeh import events
-import numpy as np
-import pandas as pd
-import requests
-from bokeh.palettes import Spectral4
 import json
-from flask import Flask, render_template, jsonify, request, url_for
-from jinja2 import Template
-from bokeh.embed import components
-from bokeh.resources import INLINE
-from bokeh.util.string import encode_utf8
-import math
-from bs4 import BeautifulSoup
-from urllib.request import Request, urlopen
-import urllib.request
+import numpy as np
 import re
-from bokeh.resources import INLINE
-from bokeh.events import ButtonClick
-from alpha_vantage.timeseries import TimeSeries
-import math
-from bokeh.models.widgets import RadioButtonGroup
 import time
+import urllib.request
+
 
 resources = INLINE
 js_resources = resources.render_js()
@@ -81,7 +71,7 @@ def web_scraper(day, month, year):
     #url for search query
     url = "http://www.marketwatch.com/search?q=" + str(stock_ticker).upper() + "&m=Ticker&rpp=15&mp=2005&bd=true&bd=false&bdv=" + str(month) + "%2F" + str(day) + "%2F20" + str(year) + "&rs=true"
     page = opener.open(url)
-    soup = BeautifulSoup(page, "html.parser")
+    soup = BeautifulSoup(page, 'lxml')
     #use beauitful soup to find all divs with the r class, which essentially
     #is the same as finding all of the divs that contain each individiaul search
 
@@ -91,6 +81,7 @@ def web_scraper(day, month, year):
     #iterating through time published and publishing company
     #gets rid of the prev strings at the beginning and end of the resulting list
     for article, date in soup_tuple_list:
+        print(article, date)
         try:
             time = date.contents[1][5:]
             time = re.findall(r'\|.[A-Za-z ]*', time)[0]
