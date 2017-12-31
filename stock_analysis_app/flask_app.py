@@ -87,7 +87,3 @@ def get_articles():
 @app.route("/")
 def index():
     return render_template("index.html", js=js, div=div, cdn_js=cdn_js, cdn_css=cdn_css)
-
-#run the app
-if __name__ == "__main__":
-    app.run(debug=True) #set debug false when making web app live
