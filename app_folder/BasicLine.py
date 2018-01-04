@@ -47,15 +47,6 @@ def get_data(stock_ticker):
 
 data,meta_data = get_data(stock_ticker)
 
-text_input = TextInput(value="NFLX")
-text_input.css_classes = ["text-input"]
-button = Button(label="main")
-button2 = Button(label="submit")
-button2.css_classes = ["button"]
-output=Paragraph()
-radio_button_group = RadioButtonGroup(
-        labels=["1w", "1m", "3m", "6m", "1y", "5y"], active=5)
-radio_button_group.css_classes = ["radio-button-group"]
 
 # str -> lst
 # Hard coded to specifically scrape the google website and returns a list of
@@ -116,7 +107,15 @@ def y_min_max(data, index):
         minVal = 0
     return ((minVal - 5), (maxVal + 5))
 
-
+text_input = TextInput(value="NFLX")
+text_input.css_classes = ["text-input"]
+button = Button(label="main")
+button2 = Button(label="submit")
+button2.css_classes = ["button"]
+output=Paragraph()
+radio_button_group = RadioButtonGroup(
+        labels=["1w", "1m", "3m", "6m", "1y", "5y"], active=5)
+radio_button_group.css_classes = ["radio-button-group"]
 p = figure(x_axis_type="datetime", tools=tools_lst, width=1000, height = 500)
 source = data_to_CDS(stock_ticker, data, delta_5_year)
 p.line('date', 'price', source=source, line_width=2)
@@ -130,13 +129,6 @@ p.add_tools(HoverTool(tooltips=[
     },
     mode="vline"
 ))
-
-#finance_info = Div(text="""
-#    <b>NFLX</b>
-#    <div class='price'>
-#        24.31
-#    </div>
-#""")
 
 div = Div(text="""Click on the graph to display a list of financial articles on and before that date""", width=500, height=500)
 div.css_classes = ["scroll-box"]
@@ -221,15 +213,13 @@ radio_button_callback = CustomJS(args=dict(fig=p), code="""
                 }
             });
         """ % (date_ints, stock_ticker))
-
+#setting callbacks for figure, button, and radio group.
 p.js_on_event('tap', tap_callback)
-
 button2.js_on_event(ButtonClick, button_callback)
-
 radio_button_group.callback = radio_button_callback
 
 lay_out = column(row(text_input, button2), radio_button_group, output, row(p,div))
-
 curdoc().add_root(lay_out)
 
+#compiling all components into js and div components.
 js,div=components(lay_out, INLINE)
