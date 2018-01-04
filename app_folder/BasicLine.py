@@ -47,10 +47,6 @@ def get_data(stock_ticker):
 
 data,meta_data = get_data(stock_ticker)
 
-
-tools_lst = "pan,wheel_zoom,box_zoom,reset"
-date_titles = ["week", "month", "3 months", "6 months", "1 year", "3 years"]
-
 text_input = TextInput(value="NFLX")
 text_input.css_classes = ["text-input"]
 button = Button(label="main")
