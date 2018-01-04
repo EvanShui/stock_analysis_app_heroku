@@ -1,14 +1,10 @@
-#flask app
 from flask import Flask, render_template
 from datetime import datetime
-import BasicLine
-from BasicLine import js, div, cdn_js, cdn_css, dates, stock_ticker
-from BasicLine import web_scraper, data_to_CDS_y, get_data, y_min_max
+from app_folder.BasicLine import js, div, cdn_js, cdn_css, dates, stock_ticker
+from app_folder.BasicLine import web_scraper, data_to_CDS_y, get_data, y_min_max
+from app_folder import app
 from flask import Flask, render_template, jsonify, request, url_for
 import json
-
-#instantiate the flask append
-app = Flask(__name__)
 
 @app.route("/resize_y_range", methods=['POST'])
 def resize_y_range():
@@ -87,7 +83,3 @@ def get_articles():
 @app.route("/")
 def index():
     return render_template("index.html", js=js, div=div, cdn_js=cdn_js, cdn_css=cdn_css)
-
-#run the app
-if __name__ == "__main__":
-    app.run(debug=True) #set debug false when making web app live
