@@ -1,8 +1,8 @@
 from flask import Flask, render_template
 from datetime import datetime
-from app.BasicLine import js, div, cdn_js, cdn_css, dates, stock_ticker
-from app.BasicLine import web_scraper, data_to_CDS_y, get_data, y_min_max
-from app import app
+from app_folder.BasicLine import js, div, cdn_js, cdn_css, dates, stock_ticker
+from app_folder.BasicLine import web_scraper, data_to_CDS_y, get_data, y_min_max
+from app_folder import app
 from flask import Flask, render_template, jsonify, request, url_for
 import json
 
