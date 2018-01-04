@@ -1,5 +1,7 @@
-#importing Bokeh
+#import alpha_vantage - grabs stock data
 from alpha_vantage.timeseries import TimeSeries
+
+#import Bokeh - visualization module
 from bokeh.palettes import Spectral4
 from bokeh.plotting import figure, show, output_file, ColumnDataSource
 from bokeh.io import curdoc
@@ -11,13 +13,29 @@ from bokeh.resources import INLINE
 from bokeh.layouts import layout, row, column, widgetbox
 from bokeh.models.widgets import RadioButtonGroup
 from bokeh import events
+
+#import bs4 - web scraping module
 from bs4 import BeautifulSoup
+
+#import datetime - object used for easy date manipulation and access
 from datetime import date, timedelta
+
+#import dateutil - used to find differences between datetime objects
 from dateutil.relativedelta import *
+
+#import json - data format used to send from bokeh graph to flask app
 import json
+
+#import numpy - creating arrays and find difference between datetime objects
 import numpy as np
+
+#import re - regular expressions for parsing through marketwatch articles
 import re
+
+#import time - ???
 import time
+
+#import urllib - creating urllib opener, used to pass to bs4 for web scraping.
 import urllib.request
 
 
@@ -43,6 +61,7 @@ delta_5_year = date.today() + relativedelta(years=-5)
 dates = [delta_7_days, delta_month, delta_3_months, delta_6_months,delta_year, delta_5_year, date.today()]
 
 map_ints = map(lambda date: time.mktime(date.timetuple()) * 1000, dates)
+print(map_ints)
 date_ints = [date_int for date_int in map_ints]
 
 tools_lst = "pan,wheel_zoom,box_zoom,reset"
