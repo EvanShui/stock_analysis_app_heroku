@@ -1,3 +1,5 @@
+from alpha_vantage.timeseries import TimeSeries
+
 from bokeh.resources import INLINE
 from datetime import date, timedelta
 from dateutil.relativedelta import *
