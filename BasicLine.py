@@ -106,22 +106,22 @@ def data_to_CDS(stock_ticker, data, start_date):
     data['ticker'] = stock_ticker
     adjusted_data = data.tail(delta_days)
     source = ColumnDataSource(data=dict(
-        date=np.array(adjusted_data['close'].index, dtype=np.datetime64),
-        price=adjusted_data['close'].values,
+        date=np.array(adjusted_data['4. close'].index, dtype=np.datetime64),
+        price=adjusted_data['4. close'].values,
         index=adjusted_data['ticker']
     ))
     return source
 
 def data_to_CDS_y(data, start_date):
     delta_days = np.busday_count(start_date, date.today())
-    adjusted_data = data['close'].tail(delta_days)
+    adjusted_data = data['4. close'].tail(delta_days)
     return (np.array(adjusted_data.values).tolist(), [int(x) for x in (data.tail(1).values)[0]])
 
 def y_min_max(data, index):
     delta_days = np.busday_count(dates[index], date.today())
     adjusted_data = data.tail(delta_days)
-    maxVal = adjusted_data['close'].max()
-    minVal = adjusted_data['close'].min()
+    maxVal = adjusted_data['4. close'].max()
+    minVal = adjusted_data['4. close'].min()
     if minVal < 0:
         minVal = 0
     return ((minVal - 5), (maxVal + 5))
