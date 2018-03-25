@@ -155,14 +155,13 @@ button_callback = CustomJS(args=dict(radio_button_group=radio_button_group, div=
         data: {"ticker_sent": ticker},
         dataType: 'json',
         success: function (json_from_server) {
-            console.log(typeof source);
-            console.log(text_input.value);
             var updated_price_list = json_from_server[ticker][0];
             var current_date_data = json_from_server[ticker][1];
             source.data['price'] = updated_price_list;
             var current_price = updated_price_list[updated_price_list.length-1]
             source.change.emit();
-            //source.trigger('change');
+            console.log(new source);
+            console.log(source);
             var actual_ticker = %r;
             radio_button_group.active = 5
             output.text = current_price;
@@ -231,6 +230,11 @@ radio_button_callback = CustomJS(args=dict(fig=p), code="""
         """ % (date_ints, stock_ticker))
 #setting callbacks for figure, button, and radio group.
 p.js_on_event('tap', tap_callback)
+p.xaxis.visible = False
+p.xgrid.visible = False
+p.ygrid.grid_line_color = "LightSlateGrey"
+p.background_fill_color = "DimGrey"
+p.border_fill_color = "DimGrey"
 button2.js_on_event(ButtonClick, button_callback)
 radio_button_group.callback = radio_button_callback
 

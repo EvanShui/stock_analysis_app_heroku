@@ -1,6 +1,7 @@
 .scroll-box {
   overflow:auto;
   position: absolute;
+  background-color: #313338;
   bottom: 20px;
   border: 1px solid black;
 }
@@ -28,4 +29,12 @@
   position: absolute;
   top: 10px;
   z-index: 1;
+}
+
+body {
+  background-color: #313338;
+}
+
+p {
+  color: blue;
 }
