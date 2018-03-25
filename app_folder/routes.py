@@ -1,5 +1,6 @@
 from flask import Flask, render_template
 from datetime import datetime
+from app_folder import BasicLine
 from app_folder.BasicLine import js, div, cdn_js, cdn_css, dates, stock_ticker
 from app_folder.BasicLine import web_scraper, data_to_CDS_y, get_data, y_min_max
 from app_folder import app
@@ -31,6 +32,7 @@ def resize_y_range():
 @app.route("/update_y_data", methods=['POST'])
 def get_y_data():
     global stock_ticker
+    print("old stick ticker", stock_ticker)
     app.logger.info(
         "Browser sent the following via AJAX: %s", json.dumps(request.form))
     ticker = request.form['ticker_sent']
@@ -40,8 +42,11 @@ def get_y_data():
     app.logger.info(
         "New basicline ticker: %s", BasicLine.stock_ticker)
     data, meta_data = get_data(ticker)
+    print("data for new ticker {} is {}".format(ticker, data))
     BasicLine.data = data
     sources_y_list = data_to_CDS_y(data, dates[5])
+    print("new baseline ticker", BasicLine.stock_ticker)
+    print("source y list", sources_y_list)
     return jsonify({ticker:(sources_y_list[0], sources_y_list[1])})
 
 @app.route("/get_data",methods=['POST'])
@@ -74,6 +79,7 @@ def get_articles():
         month = str(month)
     #creates the list of data given the x-coordinate of the mouse and assigns the resulting list
     list_to_return = web_scraper(day, month, year)
+    print("list to return", list_to_return)
     app.logger.info(
         "x_coord %r", (variable_to_return))
     #returns a list in form of json
