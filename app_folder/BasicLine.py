@@ -155,10 +155,13 @@ button_callback = CustomJS(args=dict(radio_button_group=radio_button_group, div=
         data: {"ticker_sent": ticker},
         dataType: 'json',
         success: function (json_from_server) {
+            console.log(typeof source);
+            console.log(text_input.value);
             var updated_price_list = json_from_server[ticker][0];
             var current_date_data = json_from_server[ticker][1];
             source.data['price'] = updated_price_list;
             var current_price = updated_price_list[updated_price_list.length-1]
+            source.change.emit();
             //source.trigger('change');
             var actual_ticker = %r;
             radio_button_group.active = 5
